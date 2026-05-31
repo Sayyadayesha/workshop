@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediNear - Enhanced Emergency Medical Assistance</title>
+    <meta name="description" content="Locate open pharmacies, hospitals, clinics, and ambulance services in seconds.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- SOS Overlay Screen -->
+    <div id="sosOverlay" class="sos-overlay">
+        <div class="sos-content">
+            <button class="btn-close-sos" onclick="toggleSOS()"><i class="fa-solid fa-xmark"></i> Exit SOS Mode</button>
+            <h1 class="sos-title">Emergency Assistance</h1>
+            <p class="sos-subtitle">Get help immediately</p>
+            
+            <div class="sos-actions">
+                <a href="tel:108" class="sos-card sos-ambulance">
+                    <i class="fa-solid fa-truck-medical"></i>
+                    <h2>Call Ambulance</h2>
+                </a>
+                <div class="sos-card sos-hospital" onclick="quickLocate('hospital')">
+                    <i class="fa-solid fa-hospital"></i>
+                    <h2>Nearest Hospital</h2>
+                </div>
+                <div class="sos-card sos-pharmacy" onclick="quickLocate('pharmacy')">
+                    <i class="fa-solid fa-capsules"></i>
+                    <h2>Nearest Pharmacy</h2>
+                </div>
+                <div class="sos-card sos-contacts">
+                    <i class="fa-solid fa-users"></i>
+                    <h2>Emergency Contacts</h2>
+                </div>
+                <div class="sos-card sos-directions">
+                    <i class="fa-solid fa-location-arrow"></i>
+                    <h2>Quick Directions</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sticky Emergency Banner -->
+    <div class="emergency-banner" id="emergencyBanner">
+        <div class="banner-content">
+            <span class="pulse-icon"><i class="fa-solid fa-truck-medical"></i></span>
+            <p>Medical Emergency? Call Ambulance Immediately</p>
+            <a href="tel:108" class="btn btn-danger"><i class="fa-solid fa-phone"></i> Call Emergency Services</a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-heart-pulse"></i> MediNear
+            </a>
+            <ul class="nav-links">
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#guidance">Guidance</a></li>
+                <li><a href="#facilities">Facilities</a></li>
+            </ul>
+            <button class="btn-sos-nav" onclick="toggleSOS()">
+                <div class="sos-nav-pulse"></div>
+                SOS
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <h1>Find Emergency Medical Help Near You — Instantly</h1>
+                <p>Locate open pharmacies, hospitals, clinics, and ambulance services in seconds.</p>
+                <div class="hero-actions">
+                    <a href="#facilities" class="btn btn-primary"><i class="fa-solid fa-location-dot"></i> Find Help Now</a>
+                    <button class="btn btn-danger" onclick="toggleSOS()"><i class="fa-solid fa-bell"></i> SOS Mode</button>
+                </div>
+            </div>
+        </div>
+        <div class="hero-bg-pattern"></div>
+    </header>
+    
+    <!-- Emergency Preparedness Dashboard -->
+    <section id="dashboard" class="dashboard-section">
+        <div class="container">
+            <h2 class="section-title">Emergency Preparedness Dashboard</h2>
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-hospital"></i></div>
+                    <div class="stat-details">
+                        <h3 class="counter" data-target="3">0</h3>
+                        <p>Nearby Hospitals</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-capsules"></i></div>
+                    <div class="stat-details">
+                        <h3 class="counter" data-target="2">0</h3>
+                        <p>Open Pharmacies</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-truck-medical"></i></div>
+                    <div class="stat-details">
+                        <h3 class="counter" data-target="2">0</h3>
+                        <p>Ambulance Services</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-address-book"></i></div>
+                    <div class="stat-details">
+                        <h3 class="counter" id="contactCounter" data-target="1">0</h3>
+                        <p>Emergency Contacts Saved</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Medical Guidance -->
+    <section id="guidance" class="guidance-section">
+        <div class="container">
+            <h2 class="section-title">Quick Medical Guidance</h2>
+            <div class="guidance-grid">
+                <div class="guide-card">
+                    <div class="guide-header">
+                        <i class="fa-solid fa-heart-crack icon-red"></i>
+                        <h3>Chest Pain</h3>
+                    </div>
+                    <ul class="guide-tips">
+                        <li>Seek immediate medical attention</li>
+                        <li>Call ambulance if severe</li>
+                        <li>Prioritize emergency hospitals</li>
+                    </ul>
+                    <button class="btn btn-danger-soft btn-sm" onclick="filterFacilities('Hospital')">Find Hospitals</button>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-header">
+                        <i class="fa-solid fa-temperature-arrow-up icon-orange"></i>
+                        <h3>High Fever</h3>
+                    </div>
+                    <ul class="guide-tips">
+                        <li>Visit nearest clinic</li>
+                        <li>Stay hydrated</li>
+                        <li>Seek urgent care if symptoms worsen</li>
+                    </ul>
+                    <button class="btn btn-primary-soft btn-sm" onclick="filterFacilities('Clinic')">Find Clinics</button>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-header">
+                        <i class="fa-solid fa-person-falling-burst icon-red"></i>
+                        <h3>Accident / Injury</h3>
+                    </div>
+                    <ul class="guide-tips">
+                        <li>Visit emergency hospital</li>
+                        <li>Call ambulance if necessary</li>
+                    </ul>
+                    <button class="btn btn-danger-soft btn-sm" onclick="filterFacilities('Hospital')">Emergency Wards</button>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-header">
+                        <i class="fa-solid fa-lungs icon-red"></i>
+                        <h3>Breathing Difficulty</h3>
+                    </div>
+                    <ul class="guide-tips">
+                        <li>Call emergency services immediately</li>
+                        <li>Go to nearest hospital</li>
+                    </ul>
+                    <button class="btn btn-danger-soft btn-sm" onclick="filterFacilities('Hospital')">Find Hospitals</button>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-header">
+                        <i class="fa-solid fa-burger icon-orange"></i>
+                        <h3>Food Poisoning</h3>
+                    </div>
+                    <ul class="guide-tips">
+                        <li>Visit nearest clinic or hospital</li>
+                        <li>Stay hydrated</li>
+                    </ul>
+                    <button class="btn btn-primary-soft btn-sm" onclick="filterFacilities('Clinic')">Find Clinics</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Family Emergency Card & Search Dual Section -->
+    <section class="tools-section">
+        <div class="container">
+            <div class="tools-grid">
+                <!-- My Emergency Profile -->
+                <div class="profile-card">
+                    <h2 class="section-title">My Emergency Profile</h2>
+                    <form id="profileForm" class="profile-form">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="profName" value="Rahul Sharma" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Blood Group</label>
+                            <input type="text" id="profBlood" value="O+" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Emergency Contact</label>
+                            <input type="text" id="profContact" value="Father" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" id="profPhone" value="+91 9876543216" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Known Allergies</label>
+                            <input type="text" id="profAllergies" value="None" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Medical Conditions</label>
+                            <input type="text" id="profConditions" value="None" disabled>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-outline-primary" id="editProfileBtn" onclick="toggleEditProfile()">Edit Profile</button>
+                            <button type="button" class="btn btn-primary" id="saveProfileBtn" onclick="saveProfile()" style="display:none;">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Medicine Availability Search -->
+                <div class="medicine-search-card">
+                    <h2 class="section-title">Search Medicine Availability</h2>
+                    <div class="search-bar">
+                        <i class="fa-solid fa-pills search-icon"></i>
+                        <input type="text" id="medicineSearchInput" placeholder="E.g., Paracetamol, Dolo 650...">
+                    </div>
+                    <div id="medicineResults" class="medicine-results">
+                        <!-- Medicine results populated by JS -->
+                        <div class="medicine-placeholder">
+                            <i class="fa-solid fa-prescription-bottle-medical"></i>
+                            <p>Search for a medicine to find nearby pharmacies.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Search & Filter Section -->
+    <section id="search-section" class="search-section">
+        <div class="container">
+            <h2 class="section-title">Facility Search</h2>
+            <div class="search-wrapper">
+                <div class="search-bar">
+                    <i class="fa-solid fa-search search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search hospital, clinic, pharmacy...">
+                </div>
+                <div class="filter-pills" id="filterPills">
+                    <button class="filter-pill active" data-filter="All">All</button>
+                    <button class="filter-pill" data-filter="Open Now">Open Now</button>
+                    <button class="filter-pill" data-filter="24 Hours">24 Hours</button>
+                    <button class="filter-pill" data-filter="Has Ambulance">Has Ambulance</button>
+                    <button class="filter-pill" data-filter="Hospital">Hospital</button>
+                    <button class="filter-pill" data-filter="Clinic">Clinic</button>
+                    <button class="filter-pill" data-filter="Pharmacy">Pharmacy</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section id="map-section" class="map-section">
+        <div class="container">
+            <div class="map-container">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d113911.39634731835!2d80.14389620000002!3d12.986326699999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5265ea4f7d3361%3A0x6e61a70b6863d433!2sChennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1699999999999!5m2!1sen!2sin" 
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+                <div class="map-overlay">Interactive map simulated. Marker popups available in full version.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Facilities List Section -->
+    <section id="facilities" class="facilities-section">
+        <div class="container">
+            <div class="facilities-header">
+                <h2 class="section-title">Nearby Medical Facilities</h2>
+                <span class="results-count" id="resultsCount">6 Results</span>
+            </div>
+            
+            <div class="facilities-grid" id="facilitiesGrid">
+                <!-- Cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <i class="fa-solid fa-heart-pulse"></i> MediNear
+                </a>
+                <p>Your reliable partner in medical emergencies.</p>
+            </div>
+            <div class="footer-links">
+                <ul>
+                    <li><a href="#">About MediNear</a></li>
+                    <li><a href="#">Emergency Resources</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 MediNear. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Fixed Mobile Emergency Bottom Bar -->
+    <div class="mobile-emergency-bar">
+        <a href="tel:108" class="mobile-action-btn red"><i class="fa-solid fa-truck-medical"></i> Call</a>
+        <button class="mobile-action-btn" onclick="filterFacilities('Hospital')"><i class="fa-solid fa-hospital"></i> ER</button>
+        <button class="mobile-action-btn blue" onclick="toggleSOS()"><i class="fa-solid fa-bell"></i> SOS</button>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget">
+        <button class="chatbot-toggle" id="chatbotToggle" onclick="toggleChat()">
+            <i class="fa-solid fa-robot"></i>
+        </button>
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <h3><i class="fa-solid fa-heart-pulse"></i> MediBot</h3>
+                <button onclick="toggleChat()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="chat-msg bot-msg">
+                    Hi! I'm MediBot. I can help you with basic triage or answer questions. How can I assist you today?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="handleChatKeyPress(event)">
+                <button onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

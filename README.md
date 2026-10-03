@@ -1,6 +1,7 @@
 # MediNear – Emergency Medical Assistance Platform
 
 ## Overview
+Ayesha Pasha 
 
 MediNear is a healthcare emergency assistance platform designed to help users quickly locate and contact nearby medical services during critical situations.
 
